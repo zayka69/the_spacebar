@@ -10,6 +10,7 @@ namespace App\Controller;
 
 
 use App\Entity\Article;
+use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Michelf\MarkdownInterface;
 use Psr\Log\LoggerInterface;
@@ -23,20 +24,29 @@ class ArticleController extends AbstractController
 {
     /**
      * @Route("/", name="app_homepage")
+     * @param ArticleRepository $repository
+     * @return Response
      */
-    public function homepage(){
-        return $this->render('article/homepage.html.twig');
+    public function homepage(ArticleRepository $repository)
+    {
+        //$repository = $em->getRepository(Article::class);
+        $articles = $repository->findAllPublishedOrderedByNewest();
+        return $this->render('article/homepage.html.twig', [
+            'articles' => $articles,
+        ]);
     }
 
     /**
      * @Route("/news/{slug}", name="article_show")
+     * @param Article $article
+     * @return Response
      */
   //  public function show($slug, MarkdownInterface $markdown, AdapterInterface $cache, EntityManagerInterface $em){
-        public function show($slug, AdapterInterface $cache, EntityManagerInterface $em){
+        public function show(Article $article){
 
-        $repository = $em->getRepository(Article::class);
+       // $repository = $em->getRepository(Article::class);
         /** @var Article $article */
-        $article = $repository->findOneBy(['slug' => $slug]);
+     //   $article = $repository->findOneBy(['slug' => $slug]);
         if (!$article) {
             throw $this->createNotFoundException(sprintf('No article for slug "%s"', $slug));
         }
@@ -97,11 +107,16 @@ EOF; */
 
     /**
      * @Route("/news/{slug}/heart", name="article_toggle_heart", methods={"POST"})
+     * @param Article $article
+     * @param LoggerInterface $logger
+     * @param EntityManagerInterface $em
+     * @return JsonResponse
      */
-    public function toggleArticleHeart($slug, LoggerInterface $logger)
+    public function toggleArticleHeart(Article $article, LoggerInterface $logger, EntityManagerInterface $em)
     {
-
+        $article->incrementHeartCount();
+        $em->flush();
         $logger->info('Article is being hearted!');
-        return new JsonResponse(['hearts' => rand(5, 100)]);
+        return new JsonResponse(['hearts' => $article->getHeartCount()]);
     }
 }

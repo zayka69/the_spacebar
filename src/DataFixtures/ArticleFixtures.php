@@ -75,7 +75,10 @@ EOF
             }
             $article->setAuthor('Mike Ferengi')
                 ->setHeartCount(rand(5, 100))
-                ->setImageFilename('asteroid.jpeg');
+                ->setImageFilename('asteroid.jpeg')
+                ->setCreatedAt(new \DateTime())
+                ->setUpdatedAt(new \DateTime());
+           // ->setCrea(new \DateTime(sprintf('-%d days', rand(1, 100))));  //Faire createdAt
         });
 
         //$manager->persist($article);

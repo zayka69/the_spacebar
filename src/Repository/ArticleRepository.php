@@ -22,10 +22,14 @@ class ArticleRepository extends ServiceEntityRepository
 
     /**
      * @return Article[] Returns an array of Article objects
+     * @throws \Doctrine\ORM\Query\QueryException
      */
 
     public function findAllPublishedOrderedByNewest()
     {
+
+        $this->createQueryBuilder('a')
+            ->addCriteria(CommentRepository::createNonDeletedCriteria());
 
         return $this->addIsPublishedQueryBuilder()
             ->orderBy('a.publishedAt', 'DESC')

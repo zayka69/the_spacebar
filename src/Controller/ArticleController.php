@@ -11,6 +11,7 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Michelf\MarkdownInterface;
 use Psr\Log\LoggerInterface;
@@ -50,11 +51,12 @@ class ArticleController extends AbstractController
         if (!$article) {
             throw $this->createNotFoundException(sprintf('No article for slug "%s"', $slug));
         }
-        $comments = [
+      //  $comments = $article->getComments();
+      /*  $comments = [
             'I ate a normal rock once. It did NOT taste like bacon!',
             'Woohoo! I\'m going on an all-asteroid diet!',
             'I like bacon too! Buy some from my site! bakinsomebacon.com',
-        ];
+        ]; */
 
         //dump($slug, $this);
        /* $articleContent = <<<EOF
@@ -101,7 +103,7 @@ EOF; */
            // 'articleContent'=>$articleContent,
            // 'slug' => $slug,
             'article' => $article,
-            'comments' => $comments,
+          //  'comments' => $comments,
         ]);
     }
 

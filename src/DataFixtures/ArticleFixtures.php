@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 
 use App\Entity\Article;
+use App\Entity\Comment;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -48,7 +49,8 @@ class ArticleFixtures extends BaseFixture
 
     public function loadData(ObjectManager $manager)
     {
-        $this->createMany(Article::class, 10, function(Article $article, $count) {
+        $this->createMany(Article::class, 10, function(Article $article, $count) use ($manager) {
+
             //$article = new Article();
             $article->setTitle('Why Asteroids Taste Like Bacon')
                 ->setSlug('why-asteroids-taste-like-bacon-' . rand(100, 999))
@@ -79,7 +81,26 @@ EOF
                 ->setCreatedAt(new \DateTime())
                 ->setUpdatedAt(new \DateTime());
            // ->setCrea(new \DateTime(sprintf('-%d days', rand(1, 100))));  //Faire createdAt
+
+         /*   $comment1 = new Comment();
+            $comment1->setAuthorName("Mike Farengi");
+            $comment1->setContent("I ate a normal rock once. It did NOT 22 taste like bacon!");
+            $comment1->setCreatedAt(new \DateTime());
+            $comment1->setUpdatedAt(new \DateTime());
+            $comment1->setArticle($article);
+           // $article->addComment($comment1);
+            $manager->persist($comment1);
+
+            $comment2 = new Comment();
+            $comment2->setAuthorName("Mike Farengi");
+            $comment2->setContent("Woohoo! I'm going on an 33 all-asteroid diet!");
+            $comment2->setCreatedAt(new \DateTime());
+            $comment2->setUpdatedAt(new \DateTime());
+            $comment2->setArticle($article);
+          //  $article->addComment($comment2);
+            $manager->persist($comment2);*/
         });
+
 
         //$manager->persist($article);
         $manager->flush();

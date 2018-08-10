@@ -8,7 +8,7 @@ Read {{ article.title }}
 
 
                         <div class="col-sm-12">
-                            <img class="show-article-img" src="{{ asset('images/asteroid.jpeg') }}">
+                            <img class="show-article-img" src="{{ asset(article.imagePath) }}">
                             <div class="show-article-title-container d-inline-block pl-3 align-middle">
                                 <span class="show-article-title ">{{ article.title }}</span>
                                 <br>
@@ -19,6 +19,11 @@ Read {{ article.title }}
                                 <span class="pl-2 article-details">
                                     <span class="js-like-article-count">{{ article.heartCount }}</span>
                                     <a href="{{ path('article_toggle_heart', {slug: article.slug}) }}" class="fa fa-heart-o like-article js-like-article"></a> </span>
+                                <span class="pl-2 article-details">
+                                    {% for tag in article.tags %}
+                                        <span class="badge badge-secondary">{{ tag.name }}</span>
+                                    {% endfor %}
+                                </span>
                             </div>
                         </div>
                     </div>

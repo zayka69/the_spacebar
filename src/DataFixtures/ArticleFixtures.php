@@ -5,10 +5,12 @@ namespace App\DataFixtures;
 
 use App\Entity\Article;
 use App\Entity\Comment;
+use App\Entity\Tag;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class ArticleFixtures extends BaseFixture
+class ArticleFixtures extends BaseFixture implements DependentFixtureInterface
 {
     /*   public function load(ObjectManager $manager)
       {
@@ -99,11 +101,23 @@ EOF
             $comment2->setArticle($article);
           //  $article->addComment($comment2);
             $manager->persist($comment2);*/
+
+            $tags = $this->getRandomReferences(Tag::class, $this->faker->numberBetween(0, 5));
+            foreach ($tags as $tag) {
+                $article->addTag($tag);
+            }
         });
 
 
         //$manager->persist($article);
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            TagFixture::class,
+        ];
     }
 
 
